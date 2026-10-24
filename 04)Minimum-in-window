@@ -1,0 +1,54 @@
+Sliding Window Minimum - Notes
+
+Problem:
+--------
+Given an array of size N and a window size K, find the minimum element in every contiguous subarray of size K.[cite: 18]
+
+Key Idea:
+---------
+If a new element enters the window, and it is smaller than previous elements already in the window, those previous elements are now completely useless.[cite: 18]
+- Because the new element is smaller AND it will stay in the window longer.[cite: 18]
+- We can aggressively delete these useless elements from the back of our deque.[cite: 18]
+- The values corresponding to the indices in our deque will always be in strictly increasing order, meaning the minimum is ALWAYS at the front.[cite: 18]
+
+Approach (Monotonic Deque):
+---------------------------
+- Maintain a Double-Ended Queue (deque) of indices (not values).[cite: 18]
+- For each index i from 0 to N-1:[cite: 18]
+  - Clean the Back: Remove elements from the back while the deque is not empty and current element A[i] <= A[dq.back()].[cite: 18]
+  - Add Current: Push the current index i into the deque.[cite: 18]
+  - Clean the Front: Remove the front element if its index has fallen out of the current window (dq.front() == i - K).[cite: 18]
+  - Record Answer: If i >= K - 1 (the first full window has formed), the minimum for the current window is A[dq.front()].[cite: 18]
+
+Time and Space:
+---------------
+- Time: Amortized O(N).[cite: 18] Every element is pushed to the deque at most once and popped at most once.[cite: 18]
+- Space: O(K).[cite: 18] The deque will hold at most K indices at any given time.[cite: 18]
+
+Use cases (Variations):
+-----------------------
+- Maximum element in a window (keep deque in strictly decreasing order).[cite: 18]
+- Smallest prime in a window.[cite: 18]
+- Highest perfect square in a window.[cite: 18]
+
+Pseudocode:
+-----------
+function slidingWindowMin(A, N, K):
+    dq = empty deque
+
+    for i from 0 to N-1:[cite: 18]
+        while dq is not empty and A[i] <= A[dq.back()]:[cite: 18]
+            dq.pop_back()[cite: 18]
+            
+        dq.push_back(i)[cite: 18]
+        
+        if dq.front() == i - K:[cite: 18]
+            dq.pop_front()[cite: 18]
+            
+        if i >= K - 1:[cite: 18]
+            record or print A[dq.front()][cite: 18]
+
+Things to remember:
+-------------------
+- Always store indices in the deque, not the values themselves.[cite: 18]
+- The operations inside the while loop run at most N times globally, making it faster than Brute Force O(N * K) or Multiset O(N log K) solutions.[cite: 18]
